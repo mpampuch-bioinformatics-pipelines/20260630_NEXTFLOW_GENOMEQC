@@ -7,27 +7,38 @@
     "items": {
         "type": "object",
         "properties": {
-            "sample": {
+            "SampleID": {
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "AssemblyFASTA": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.(fa|fna|fasta)(\\.gz)?$",
+                "errorMessage": "Assembly FASTA must be provided and have extension .fa, .fna, .fasta, optionally with .gz"
             },
-            "fastq_2": {
+            "BUSCO_lineage": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "BUSCO lineage must be provided and cannot contain spaces"
+            },
+            "reads": {
                 "type": "string",
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "description": "Optional path to long-read FASTQ/FASTA file(s) used to build FastK k-mer databases for MerquryFK QC. Semicolon-separated for multiple files. Leave blank to skip MerquryFK.",
+                "pattern": "^$|^([\\S\\s]*\\/)?[^\\s\\/;]+(\\.(f(ast)?q|fa|fna|fasta)(\\.gz)?)(;([\\S\\s]*\\/)?[^\\s\\/;]+(\\.(f(ast)?q|fa|fna|fasta)(\\.gz)?))*$",
+                "errorMessage": "Optional reads path(s) for MerquryFK; semicolon-separated FASTQ/FASTA files, or leave blank"
+            },
+            "platform": {
+                "type": "string",
+                "description": "Sequencing platform for reads. Required when reads are provided; defaults to --read_platform otherwise.",
+                "enum": ["pacbio_hifi", "oxford_nanopore", "illumina", "illumina_hic", "illumina_10x"],
+                "errorMessage": "Sequencing platform for reads; required when reads are provided"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["SampleID", "AssemblyFASTA", "BUSCO_lineage"]
     }
 }

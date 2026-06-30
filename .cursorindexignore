@@ -1,0 +1,9 @@
+# Don't index TEST_DATA
+TEST_DATA/
+
+# Don't index SLURM_LOGS
+SLURM_LOGS/
+
+# Don't index OUTPUTS
+OUTPUTS/
+

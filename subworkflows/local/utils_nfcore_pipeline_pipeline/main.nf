@@ -80,21 +80,9 @@ workflow PIPELINE_INITIALISATION {
 
     channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
-        }
-        .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
-        }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+        .map { meta, assembly_fasta, busco_lineage, reads = null, platform = null ->
+            def meta_ext = platform?.toString()?.trim() ? meta + [ platform: platform ] : meta
+            return [ meta_ext, assembly_fasta, busco_lineage, parseReadsInput(reads) ]
         }
         .set { ch_samplesheet }
 
@@ -167,6 +155,25 @@ def validateInputSamplesheet(input) {
 
     return [ metas[0], fastqs ]
 }
+
+//
+// Parse optional reads column from the input samplesheet
+//
+def parseReadsInput(reads) {
+    if (!reads) {
+        return null
+    }
+    if (reads instanceof List) {
+        def files = reads.collect { it?.toString()?.trim() }.findAll { it }
+        return files ? files.collect { file(it, checkIfExists: true) } : null
+    }
+    def trimmed = reads.toString().trim()
+    if (!trimmed) {
+        return null
+    }
+    return trimmed.tokenize(';').collect { file(it.trim(), checkIfExists: true) }
+}
+
 //
 // Generate methods description for MultiQC
 //

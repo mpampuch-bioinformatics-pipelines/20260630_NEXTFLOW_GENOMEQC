@@ -1,0 +1,3 @@
+SampleID,AssemblyFASTA,BUSCO_lineage,reads,platform
+KAUST068,/ibex/project/c2303/20260630_NEXTFLOW_GENOMEQC/TESTS/TEST_DATA/KAUST068.purged.filtered.fa,bacillariophyta_odb12,/ibex/project/c2303/ALL-BCL-SEQ-READS/BCLCustomers/lauersk/Revio/r84180_20260101_070352/1_C01/version_01/68_Nitzschiasp/68_Nitzschiasp.hifi_reads.fastq.gz,
+KAUST071,/ibex/project/c2303/20260630_NEXTFLOW_GENOMEQC/TESTS/TEST_DATA/KAUST071.20260628.purged.filtered.fa.gz,chlorophyceae_odb12,/ibex/project/c2303/ALL-BCL-SEQ-READS/BCLCustomers/lauersk/Revio/r84180_20260318_102921/1_A01/version_01/71_Desmodesmussp/71_Desmodesmussp.hifi_reads.fastq,pacbio_hifi
