@@ -191,7 +191,8 @@ workflow PIPELINE {
     emit:
     multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions // channel: [ path(versions.yml) ]
-    stats          = GENOME_STATISTICS.out.stats
+    asmstats       = GENOME_STATISTICS.out.asmstats
+    gfastats       = GENOME_STATISTICS.out.gfastats
     busco          = GENOME_STATISTICS.out.busco
     merqury        = GENOME_STATISTICS.out.merqury // optional: only emitted when reads are provided
 }

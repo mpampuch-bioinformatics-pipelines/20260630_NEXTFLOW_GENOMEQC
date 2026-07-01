@@ -97,15 +97,14 @@ workflow GENOME_STATISTICS {
     ch_statistics_output = ASMSTATS.out.stats
         .mix(GFASTATS.out.assembly_summary)
         .map { meta, stats -> [meta - meta.subMap("_hap"), stats] }
-        .groupTuple(size: 4)
+        .groupTuple()
         .map { meta, out -> [meta, out.flatten().sort { f -> f.getName() }] }
 
     ch_busco_output = BUSCO_BUSCO.out.batch_summary
         .mix(BUSCO_BUSCO.out.short_summaries_txt)
         .mix(BUSCO_BUSCO.out.short_summaries_json)
         .mix(BUSCO_BUSCO.out.log)
-        .mix(BUSCO_BUSCO.out.busco_dir)
-        .groupTuple(size: 5)
+        .groupTuple()
         .map { meta, out -> [meta, out.flatten().sort { f -> f.getName() }] }
 
     ch_merqury_output = MERQURYFK_MERQURYFK.out.qv

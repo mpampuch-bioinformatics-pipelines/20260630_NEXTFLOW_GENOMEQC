@@ -6,8 +6,6 @@ process BUSCO_BUSCO {
     container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/c6/c6684133dafc676a4087ca5615907bfdaaba29210f1c8eb2082c4096a009b2cd/data'
         : 'community.wave.seqera.io/library/busco_numpy:1877b1d6022fa08d'}"
-    // Note: one test had to be disabled when switching to Busco 6.0.0, cf https://github.com/nf-core/modules/pull/8781/files
-    // Try to restore it when upgrading Busco to a later version
 
     input:
     tuple val(meta), path(fasta, stageAs: 'tmp_input/*')
@@ -126,6 +124,10 @@ process BUSCO_BUSCO {
     def fasta_name = files(fasta).first().name - '.gz'
     """
     touch ${prefix}-busco.batch_summary.txt
+    touch ${prefix}-busco.short_summary.txt
+    touch ${prefix}-busco.short_summary.json
+    mkdir -p logs
+    touch logs/busco.log
     mkdir -p ${prefix}-busco/${fasta_name}/run_${lineage}/busco_sequences
     """
 }
